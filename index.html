@@ -16,7 +16,7 @@
         Lords Mobile Wonder Tool
       </div>
       <h1 class="text-2xl font-black text-amber-400 uppercase tracking-wide drop-shadow-md">Помічник для Фортів</h1>
-      <p class="text-xs text-slate-300 mt-1">Введи склад ворога й отримай контр-склад, фалангу та війська зборщика</p>
+      <p class="text-xs text-slate-300 mt-1">Введи склад ворога й отримай контр-склад, фалангу та деталі збору</p>
     </div>
 
     <!-- Main Card -->
@@ -75,26 +75,19 @@
 
     <!-- Quick Cheat Sheet Section -->
     <div class="mt-6 bg-slate-900/70 border border-slate-800/80 rounded-2xl p-4 backdrop-blur-sm">
-      <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-3 text-center">Пам'ятка для Збору</h3>
+      <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-3 text-center">Пам'ятка по збору</h3>
       <div class="text-xs space-y-2 text-slate-300">
         <div class="p-2.5 rounded bg-slate-950/70 border border-slate-800/60">
-          <span class="text-amber-300 font-bold block mb-1">⚔️ Війська Зборщика (хто відкриває збір):</span>
+          <span class="text-amber-300 font-bold block mb-1">⚔️ Війська Зборщика:</span>
           <p class="text-[11px] text-slate-300 leading-relaxed">
-            Зборщик шле <b class="text-amber-400">лише МОНО-тип</b> (100% Піхоти, 100% Стрільців або 100% Кавалерії).
+            Зборщик шле <b class="text-amber-400">лише МОНО-тип</b> (100% піхи, 100% луки або 100% коні).
           </p>
         </div>
 
         <div class="p-2.5 rounded bg-slate-950/70 border border-slate-800/60">
-          <span class="text-amber-300 font-bold block mb-1">🛡️ Учасники збору:</span>
-          <p class="text-[11px] text-slate-300 leading-relaxed">
-            Дозаповнюють збір тими типами військ, яких недостає для формування підсумкового міксу.
-          </p>
-        </div>
-
-        <div class="p-2.5 rounded bg-slate-950/70 border border-slate-800/60">
-          <span class="text-amber-300 font-bold block mb-1">👑 Герої (Піх / Лук / Кав):</span>
+          <span class="text-amber-300 font-bold block mb-1">👑 Герої (Всього 5):</span>
           <p class="text-[11px] text-slate-300">
-            Наприклад, <b class="text-amber-400">221</b> = 2 піхотні, 2 стрілкові, 1 кавалерійський герой.
+            Загальна кількість героїв у дивізіоні завжди дорівнює 5 (наприклад, <b class="text-amber-400">221</b> = 2 Піх / 2 Лук / 1 Кав).
           </p>
         </div>
       </div>
@@ -108,53 +101,54 @@
   </footer>
 
   <script>
+    // Масив атак. Замість героїв та військ поки що стоять заглушки [Вказати...]
     const ourAttacks = [
       {
         comp: "659",
-        leaderTroops: "Фул Стрільці (100% Стрільців)",
-        heroes: "150 або 050",
+        leaderTroops: "[Вказати моно-тип]",
+        heroes: "[Вказати героїв, сума = 5]",
         phalanx: "Стрілецька фаланга (якщо мало стрільців у ворога — Кавалерійська)",
         beats: ["866", "947", "965", "659"]
       },
       {
         comp: "974",
-        leaderTroops: "Фул Стрільці (100% Стрільців)",
-        heroes: "140 або 050",
+        leaderTroops: "[Вказати моно-тип]",
+        heroes: "[Вказати героїв, сума = 5]",
         phalanx: "Стрілецька фаланга",
         beats: ["055", "659", "424", "668", "569", "235"]
       },
       {
         comp: "13 4 4",
-        leaderTroops: "Фул Піхота (100% Піхоти)",
-        heroes: "311 або 410",
+        leaderTroops: "[Вказати моно-тип]",
+        heroes: "[Вказати героїв, сума = 5]",
         phalanx: "Піхотна фаланга",
         beats: ["992", "550", "974", "442", "866"]
       },
       {
         comp: "055",
-        leaderTroops: "Фул Стрільці або Фул Кавалерія (+ 40k піхоти подушка)",
-        heroes: "023 або 032",
+        leaderTroops: "[Вказати моно-тип] (+ 40k піхоти подушка)",
+        heroes: "[Вказати героїв, сума = 5]",
         phalanx: "Лише Піхотний клин (+ обов'язково 40k піхоти)",
         beats: ["424", "659", "668"]
       },
       {
         comp: "965",
-        leaderTroops: "Фул Стрільці (100% Стрільців)",
-        heroes: "140 або 023",
+        leaderTroops: "[Вказати моно-тип]",
+        heroes: "[Вказати героїв, сума = 5]",
         phalanx: "Стрілецька фаланга",
         beats: ["442", "992", "974", "695"]
       },
       {
         comp: "208",
-        leaderTroops: "Фул Кавалерія (100% Кавалерії)",
-        heroes: "014 або 023",
+        leaderTroops: "[Вказати моно-тип]",
+        heroes: "[Вказати героїв, сума = 5]",
         phalanx: "Лише Стрілецький клин",
         beats: ["965", "866", "13 3 4", "659"]
       },
       {
         comp: "983",
-        leaderTroops: "Фул Стрільці (100% Стрільців)",
-        heroes: "140",
+        leaderTroops: "[Вказати моно-тип]",
+        heroes: "[Вказати героїв, сума = 5]",
         phalanx: "Стрілецька фаланга",
         beats: ["055", "659", "424", "668", "569", "235"]
       }
