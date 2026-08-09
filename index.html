@@ -1,4 +1,4 @@
-html_content = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
@@ -49,7 +49,7 @@ html_content = """<!DOCTYPE html>
       <div class="mb-6">
         <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Швидкий вибір:</span>
         <div id="chipsContainer" class="flex flex-wrap gap-1.5">
-          <!-- Quick buttons inserted dynamically -->
+          <!-- Кнопки підтягнуться з JS -->
         </div>
       </div>
 
@@ -61,7 +61,7 @@ html_content = """<!DOCTYPE html>
         </div>
 
         <div id="counterList" class="space-y-3">
-          <!-- Counters list inserted dynamically -->
+          <!-- Результати підтягнуться з JS -->
         </div>
       </div>
 
@@ -94,7 +94,6 @@ html_content = """<!DOCTYPE html>
   </footer>
 
   <script>
-    // База даних, сформована за правилом "Що сидить у ворога -> Чим ми його вибиваємо"
     const ourAttacks = [
       {
         comp: "659",
@@ -133,7 +132,6 @@ html_content = """<!DOCTYPE html>
       }
     ];
 
-    // Інвертуємо базу даних під запит користувача: Ворожий склад -> Списочок чим його вбивати
     const enemyDatabase = {};
 
     ourAttacks.forEach(attack => {
@@ -157,7 +155,6 @@ html_content = """<!DOCTYPE html>
     const clearBtn = document.getElementById('clearBtn');
     const chipsContainer = document.getElementById('chipsContainer');
 
-    // Рендер швидких кнопок (найпопулярніші склади ворога)
     const popularEnemies = Object.keys(enemyDatabase).sort();
     popularEnemies.forEach(target => {
       const chip = document.createElement('button');
@@ -182,7 +179,6 @@ html_content = """<!DOCTYPE html>
         return;
       }
 
-      // Шукаємо точно або за частковим співпаданням
       const matches = enemyDatabase[query];
 
       if (matches && matches.length > 0) {
@@ -227,9 +223,3 @@ html_content = """<!DOCTYPE html>
   </script>
 </body>
 </html>
-"""
-
-with open("fort_search_tool.html", "w", encoding="utf-8") as f:
-    f.write(html_content)
-
-print("Search tool generated successfully.")
