@@ -1,0 +1,235 @@
+html_content = """<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Помічник для Фортів — Lords Mobile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col justify-between">
+
+  <div class="max-w-md w-full mx-auto p-4 flex-grow flex flex-col justify-center">
+    
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <div class="inline-block bg-amber-500/10 border border-amber-500/30 rounded-full px-3 py-1 text-amber-400 text-xs font-semibold uppercase tracking-wider mb-2">
+        Lords Mobile Wonder Tool
+      </div>
+      <h1 class="text-2xl font-black text-amber-400 uppercase tracking-wide">Помічник для Фортів</h1>
+      <p class="text-xs text-slate-400 mt-1">Введи склад ворога й отримай контр-склад та фалангу</p>
+    </div>
+
+    <!-- Main Card -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 shadow-2xl backdrop-blur-md">
+      
+      <!-- Input Section -->
+      <div class="mb-5">
+        <label for="enemyCompInput" class="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">
+          Введіть склад ворога у форту:
+        </label>
+        <div class="relative">
+          <input 
+            type="text" 
+            id="enemyCompInput" 
+            placeholder="Наприклад: 055, 424, 659..." 
+            class="w-full bg-slate-950 border border-slate-700 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 rounded-xl px-4 py-3 text-lg font-bold text-amber-300 placeholder-slate-600 outline-none transition uppercase"
+            oninput="findCounter()"
+          />
+          <button 
+            onclick="clearInput()" 
+            id="clearBtn"
+            class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 p-1 font-bold text-lg"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Chips -->
+      <div class="mb-6">
+        <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Швидкий вибір:</span>
+        <div id="chipsContainer" class="flex flex-wrap gap-1.5">
+          <!-- Quick buttons inserted dynamically -->
+        </div>
+      </div>
+
+      <!-- Result Container -->
+      <div id="resultBox" class="hidden border-t border-slate-800 pt-5">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Результат пошуку:</span>
+          <span id="targetBadge" class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-0.5 rounded-md text-xs font-black"></span>
+        </div>
+
+        <div id="counterList" class="space-y-3">
+          <!-- Counters list inserted dynamically -->
+        </div>
+      </div>
+
+      <!-- Empty / Not Found State -->
+      <div id="notFoundBox" class="hidden text-center py-6 text-slate-500 border-t border-slate-800/60 mt-4">
+        <p class="text-sm font-medium">Склад ворога не знайдено в базі</p>
+        <p class="text-xs text-slate-600 mt-1">Перевірте правильність написання або оберіть зі списку вище</p>
+      </div>
+
+    </div>
+
+    <!-- Quick Cheat Sheet Section -->
+    <div class="mt-6 bg-slate-900/50 border border-slate-800/80 rounded-2xl p-4">
+      <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 text-center">Пам'ятка по атакуючих складах</h3>
+      <div class="text-xs space-y-2 text-slate-300 font-mono">
+        <div class="p-2 rounded bg-slate-950/50 border border-slate-800/50"><span class="text-amber-400 font-bold">Наш 659</span> ➡️ Стрілецька фаланга <span class="text-slate-500">(якщо мало стрільців у ворога — Кавалерійська)</span></div>
+        <div class="p-2 rounded bg-slate-950/50 border border-slate-800/50"><span class="text-amber-400 font-bold">Наш 974 / 983</span> ➡️ Стрілецька фаланга</div>
+        <div class="p-2 rounded bg-slate-950/50 border border-slate-800/50"><span class="text-amber-400 font-bold">Наш 13 4 4</span> ➡️ Піхотна фаланга</div>
+        <div class="p-2 rounded bg-slate-950/50 border border-slate-800/50"><span class="text-amber-400 font-bold">Наш 055</span> ➡️ <span class="text-green-400 font-bold">Лише Піхотний клин</span> + обов'язково 40k піхоти</div>
+        <div class="p-2 rounded bg-slate-950/50 border border-slate-800/50"><span class="text-amber-400 font-bold">Наш 965</span> ➡️ Стрілецька фаланга</div>
+        <div class="p-2 rounded bg-slate-950/50 border border-slate-800/50"><span class="text-amber-400 font-bold">Наш 208</span> ➡️ <span class="text-green-400 font-bold">Лише Стрілецький клин</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center py-3 text-[11px] text-slate-600 border-t border-slate-900">
+    Lords Mobile Fort Counter Tool • 2026
+  </footer>
+
+  <script>
+    // База даних, сформована за правилом "Що сидить у ворога -> Чим ми його вибиваємо"
+    const ourAttacks = [
+      {
+        comp: "659",
+        phalanx: "Стрілецька фаланга (якщо мало стрільців у ворога — Кавалерійська)",
+        beats: ["866", "947", "965", "659"]
+      },
+      {
+        comp: "974",
+        phalanx: "Стрілецька фаланга",
+        beats: ["055", "659", "424", "668", "569", "235"]
+      },
+      {
+        comp: "13 4 4",
+        phalanx: "Піхотна фаланга",
+        beats: ["992", "550", "974", "442", "866"]
+      },
+      {
+        comp: "055",
+        phalanx: "Лише Піхотний клин (+ обов'язково 40k піхоти)",
+        beats: ["424", "659", "668"]
+      },
+      {
+        comp: "965",
+        phalanx: "Стрілецька фаланга",
+        beats: ["442", "992", "974", "695"]
+      },
+      {
+        comp: "208",
+        phalanx: "Лише Стрілецький клин",
+        beats: ["965", "866", "13 3 4", "659"]
+      },
+      {
+        comp: "983",
+        phalanx: "Стрілецька фаланга",
+        beats: ["055", "659", "424", "668", "569", "235"]
+      }
+    ];
+
+    // Інвертуємо базу даних під запит користувача: Ворожий склад -> Списочок чим його вбивати
+    const enemyDatabase = {};
+
+    ourAttacks.forEach(attack => {
+      attack.beats.forEach(target => {
+        const normalizedTarget = target.trim();
+        if (!enemyDatabase[normalizedTarget]) {
+          enemyDatabase[normalizedTarget] = [];
+        }
+        enemyDatabase[normalizedTarget].push({
+          ourComp: attack.comp,
+          phalanx: attack.phalanx
+        });
+      });
+    });
+
+    const enemyCompInput = document.getElementById('enemyCompInput');
+    const resultBox = document.getElementById('resultBox');
+    const notFoundBox = document.getElementById('notFoundBox');
+    const counterList = document.getElementById('counterList');
+    const targetBadge = document.getElementById('targetBadge');
+    const clearBtn = document.getElementById('clearBtn');
+    const chipsContainer = document.getElementById('chipsContainer');
+
+    // Рендер швидких кнопок (найпопулярніші склади ворога)
+    const popularEnemies = Object.keys(enemyDatabase).sort();
+    popularEnemies.forEach(target => {
+      const chip = document.createElement('button');
+      chip.innerText = target;
+      chip.className = "bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-300 font-bold px-2.5 py-1 rounded-lg text-xs border border-slate-700 transition active:scale-95";
+      chip.onclick = () => {
+        enemyCompInput.value = target;
+        findCounter();
+      };
+      chipsContainer.appendChild(chip);
+    });
+
+    function findCounter() {
+      const query = enemyCompInput.value.trim().toUpperCase();
+      
+      if (query.length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+        resultBox.classList.add('hidden');
+        notFoundBox.classList.add('hidden');
+        return;
+      }
+
+      // Шукаємо точно або за частковим співпаданням
+      const matches = enemyDatabase[query];
+
+      if (matches && matches.length > 0) {
+        targetBadge.innerText = "Ворог: " + query;
+        counterList.innerHTML = "";
+
+        matches.forEach(item => {
+          const card = document.createElement('div');
+          card.className = "bg-slate-950 border border-slate-800 p-3.5 rounded-xl flex flex-col gap-1.5 shadow-md";
+          
+          let phalanxClass = "text-green-400 font-bold text-sm";
+          if (item.phalanx.includes("Клин") || item.phalanx.includes("клин")) {
+            phalanxClass = "text-emerald-300 font-black text-sm";
+          }
+
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Наш склад:</span>
+              <span class="text-xl font-black text-amber-400 font-mono">${item.ourComp}</span>
+            </div>
+            <div class="pt-1 border-t border-slate-900">
+              <span class="text-[11px] text-slate-500 uppercase tracking-wider block font-semibold">Фаланга / Клин:</span>
+              <span class="${phalanxClass}">${item.phalanx}</span>
+            </div>
+          `;
+          counterList.appendChild(card);
+        });
+
+        resultBox.classList.remove('hidden');
+        notFoundBox.classList.add('hidden');
+      } else {
+        resultBox.classList.add('hidden');
+        notFoundBox.classList.remove('hidden');
+      }
+    }
+
+    function clearInput() {
+      enemyCompInput.value = "";
+      findCounter();
+      enemyCompInput.focus();
+    }
+  </script>
+</body>
+</html>
+"""
+
+with open("fort_search_tool.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print("Search tool generated successfully.")
