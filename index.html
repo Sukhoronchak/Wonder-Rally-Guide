@@ -16,11 +16,11 @@
         Lords Mobile Wonder Tool
       </div>
       <h1 class="text-2xl font-black text-amber-400 uppercase tracking-wide drop-shadow-md">Помічник для Фортів</h1>
-      <p class="text-xs text-slate-400 mt-1">Введи склад ворога й отримай контр-склад та фалангу</p>
+      <p class="text-xs text-slate-300 mt-1">Введи склад ворога й отримай контр-склад, фалангу та війська зборщика</p>
     </div>
 
     <!-- Main Card -->
-    <div class="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-5 shadow-2xl backdrop-blur-md">
+    <div class="bg-slate-900/85 border border-slate-700/60 rounded-2xl p-5 shadow-2xl backdrop-blur-md">
       
       <!-- Input Section -->
       <div class="mb-5">
@@ -47,7 +47,7 @@
 
       <!-- Quick Chips -->
       <div class="mb-6">
-        <span class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Швидкий вибір:</span>
+        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Швидкий вибір ворога:</span>
         <div id="chipsContainer" class="flex flex-wrap gap-1.5">
           <!-- Кнопки підтягнуться з JS -->
         </div>
@@ -66,30 +66,44 @@
       </div>
 
       <!-- Empty / Not Found State -->
-      <div id="notFoundBox" class="hidden text-center py-6 text-slate-500 border-t border-slate-800/60 mt-4">
+      <div id="notFoundBox" class="hidden text-center py-6 text-slate-400 border-t border-slate-800/60 mt-4">
         <p class="text-sm font-medium">Склад ворога не знайдено в базі</p>
-        <p class="text-xs text-slate-600 mt-1">Перевірте правильність написання або оберіть зі списку вище</p>
+        <p class="text-xs text-slate-500 mt-1">Перевірте правильність написання або оберіть зі списку вище</p>
       </div>
 
     </div>
 
     <!-- Quick Cheat Sheet Section -->
-    <div class="mt-6 bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 backdrop-blur-sm">
-      <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 text-center">Пам'ятка по атакуючих складах</h3>
-      <div class="text-xs space-y-2 text-slate-300 font-mono">
-        <div class="p-2 rounded bg-slate-950/60 border border-slate-800/50"><span class="text-amber-400 font-bold">Наш 659</span> ➡️ Стрілецька фаланга <span class="text-slate-500">(якщо мало стрільців у ворога — Кавалерійська)</span></div>
-        <div class="p-2 rounded bg-slate-950/60 border border-slate-800/50"><span class="text-amber-400 font-bold">Наш 974 / 983</span> ➡️ Стрілецька фаланга</div>
-        <div class="p-2 rounded bg-slate-950/60 border border-slate-800/50"><span class="text-amber-400 font-bold">Наш 13 4 4</span> ➡️ Піхотна фаланга</div>
-        <div class="p-2 rounded bg-slate-950/60 border border-slate-800/50"><span class="text-amber-400 font-bold">Наш 055</span> ➡️ <span class="text-green-400 font-bold">Лише Піхотний клин</span> + обов'язково 40k піхоти</div>
-        <div class="p-2 rounded bg-slate-950/60 border border-slate-800/50"><span class="text-amber-400 font-bold">Наш 965</span> ➡️ Стрілецька фаланга</div>
-        <div class="p-2 rounded bg-slate-950/60 border border-slate-800/50"><span class="text-amber-400 font-bold">Наш 208</span> ➡️ <span class="text-green-400 font-bold">Лише Стрілецький клин</span></div>
+    <div class="mt-6 bg-slate-900/70 border border-slate-800/80 rounded-2xl p-4 backdrop-blur-sm">
+      <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-3 text-center">Пам'ятка для Збору</h3>
+      <div class="text-xs space-y-2 text-slate-300">
+        <div class="p-2.5 rounded bg-slate-950/70 border border-slate-800/60">
+          <span class="text-amber-300 font-bold block mb-1">⚔️ Війська Зборщика (хто відкриває збір):</span>
+          <p class="text-[11px] text-slate-300 leading-relaxed">
+            Зборщик шле <b class="text-amber-400">лише МОНО-тип</b> (100% Піхоти, 100% Стрільців або 100% Кавалерії).
+          </p>
+        </div>
+
+        <div class="p-2.5 rounded bg-slate-950/70 border border-slate-800/60">
+          <span class="text-amber-300 font-bold block mb-1">🛡️ Учасники збору:</span>
+          <p class="text-[11px] text-slate-300 leading-relaxed">
+            Дозаповнюють збір тими типами військ, яких недостає для формування підсумкового міксу.
+          </p>
+        </div>
+
+        <div class="p-2.5 rounded bg-slate-950/70 border border-slate-800/60">
+          <span class="text-amber-300 font-bold block mb-1">👑 Герої (Піх / Лук / Кав):</span>
+          <p class="text-[11px] text-slate-300">
+            Наприклад, <b class="text-amber-400">221</b> = 2 піхотні, 2 стрілкові, 1 кавалерійський герой.
+          </p>
+        </div>
       </div>
     </div>
 
   </div>
 
   <!-- Footer -->
-  <footer class="text-center py-3 text-[11px] text-slate-500 border-t border-slate-900/80">
+  <footer class="text-center py-3 text-[11px] text-slate-400 border-t border-slate-900/80">
     Lords Mobile Fort Counter Tool • 2026
   </footer>
 
@@ -97,36 +111,50 @@
     const ourAttacks = [
       {
         comp: "659",
+        leaderTroops: "Фул Стрільці (100% Стрільців)",
+        heroes: "150 або 050",
         phalanx: "Стрілецька фаланга (якщо мало стрільців у ворога — Кавалерійська)",
         beats: ["866", "947", "965", "659"]
       },
       {
         comp: "974",
+        leaderTroops: "Фул Стрільці (100% Стрільців)",
+        heroes: "140 або 050",
         phalanx: "Стрілецька фаланга",
         beats: ["055", "659", "424", "668", "569", "235"]
       },
       {
         comp: "13 4 4",
+        leaderTroops: "Фул Піхота (100% Піхоти)",
+        heroes: "311 або 410",
         phalanx: "Піхотна фаланга",
         beats: ["992", "550", "974", "442", "866"]
       },
       {
         comp: "055",
+        leaderTroops: "Фул Стрільці або Фул Кавалерія (+ 40k піхоти подушка)",
+        heroes: "023 або 032",
         phalanx: "Лише Піхотний клин (+ обов'язково 40k піхоти)",
         beats: ["424", "659", "668"]
       },
       {
         comp: "965",
+        leaderTroops: "Фул Стрільці (100% Стрільців)",
+        heroes: "140 або 023",
         phalanx: "Стрілецька фаланга",
         beats: ["442", "992", "974", "695"]
       },
       {
         comp: "208",
+        leaderTroops: "Фул Кавалерія (100% Кавалерії)",
+        heroes: "014 або 023",
         phalanx: "Лише Стрілецький клин",
         beats: ["965", "866", "13 3 4", "659"]
       },
       {
         comp: "983",
+        leaderTroops: "Фул Стрільці (100% Стрільців)",
+        heroes: "140",
         phalanx: "Стрілецька фаланга",
         beats: ["055", "659", "424", "668", "569", "235"]
       }
@@ -142,6 +170,8 @@
         }
         enemyDatabase[normalizedTarget].push({
           ourComp: attack.comp,
+          leaderTroops: attack.leaderTroops,
+          heroes: attack.heroes,
           phalanx: attack.phalanx
         });
       });
@@ -187,7 +217,7 @@
 
         matches.forEach(item => {
           const card = document.createElement('div');
-          card.className = "bg-slate-950/80 border border-slate-800 p-3.5 rounded-xl flex flex-col gap-1.5 shadow-md";
+          card.className = "bg-slate-950/90 border border-slate-800 p-3.5 rounded-xl flex flex-col gap-2 shadow-md";
           
           let phalanxClass = "text-green-400 font-bold text-sm";
           if (item.phalanx.includes("Клин") || item.phalanx.includes("клин")) {
@@ -195,13 +225,24 @@
           }
 
           card.innerHTML = `
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-2">
               <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Наш склад:</span>
               <span class="text-xl font-black text-amber-400 font-mono">${item.ourComp}</span>
             </div>
-            <div class="pt-1 border-t border-slate-900">
-              <span class="text-[11px] text-slate-500 uppercase tracking-wider block font-semibold">Фаланга / Клин:</span>
+
+            <div>
+              <span class="text-[11px] text-slate-400 uppercase tracking-wider block font-semibold">🎯 Фаланга / Клин:</span>
               <span class="${phalanxClass}">${item.phalanx}</span>
+            </div>
+
+            <div class="pt-1 border-t border-slate-900">
+              <span class="text-[11px] text-amber-300/80 uppercase tracking-wider block font-semibold">⚔️ Війська Зборщика:</span>
+              <span class="text-xs text-slate-200 font-medium">${item.leaderTroops}</span>
+            </div>
+
+            <div class="pt-1 border-t border-slate-900">
+              <span class="text-[11px] text-blue-300/80 uppercase tracking-wider block font-semibold">👑 Герої:</span>
+              <span class="text-xs text-slate-200 font-medium">${item.heroes}</span>
             </div>
           `;
           counterList.appendChild(card);
